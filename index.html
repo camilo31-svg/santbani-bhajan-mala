@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9eef2">
+  <meta name="description" content="SantBani Bhajan Mala: las colecciones SR BM y SJ BM en una sola aplicación.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SantBani BM">
+  <meta name="app-version" content="1.0">
+  <title>SantBani Bhajan Mala</title>
+  <script>
+    try {
+      const preferences = JSON.parse(localStorage.getItem("santbani-bm:preferences") || "{}");
+      document.documentElement.dataset.theme = preferences.theme === "dark" ? "dark" : "light";
+    } catch {
+      document.documentElement.dataset.theme = "light";
+    }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="santbani-icon.svg">
+  <link rel="apple-touch-icon" href="santbani-icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest?v=1.0">
+  <link rel="stylesheet" href="styles.css?v=1.0">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <a class="brand" href="./" aria-label="SantBani Bhajan Mala">
+        <span class="brand-icon" aria-hidden="true"><i data-icon="BookOpen"></i></span>
+        <span class="brand-copy">
+          <strong>SantBani Bhajan Mala</strong>
+          <small>Biblioteca · v1.0</small>
+        </span>
+      </a>
+      <button id="theme-button" class="icon-button" type="button" aria-label="Activar modo oscuro" title="Modo oscuro">
+        <i data-icon="Moon"></i>
+      </button>
+    </header>
+
+    <main class="book-grid" aria-label="Libros de bhajans">
+      <a class="book-card book-card-sr" href="sr/" aria-label="Abrir SR BM, Bhajan Mala">
+        <span class="cover-frame">
+          <img src="covers/sr-bhajan-mala.png" alt="Carátula de Bhajan Mala de Sant Sadhu Ram Ji" width="900" height="1200">
+        </span>
+        <span class="book-card-footer">
+          <span class="book-card-copy"><small>SR BM</small><strong>Bhajan Mala</strong></span>
+          <span class="open-indicator" aria-hidden="true"><i data-icon="ChevronRight"></i></span>
+        </span>
+      </a>
+
+      <a class="book-card book-card-sj" href="sj/" aria-label="Abrir SJ BM, Bayanes de los Maestros">
+        <span class="cover-frame">
+          <img src="covers/sj-bhajan-mala.png" alt="Carátula de Bayanes de los Maestros de Sant Ajaib Singh Ji" width="900" height="1200">
+        </span>
+        <span class="book-card-footer">
+          <span class="book-card-copy"><small>SJ BM</small><strong>Bayanes de los Maestros</strong></span>
+          <span class="open-indicator" aria-hidden="true"><i data-icon="ChevronRight"></i></span>
+        </span>
+      </a>
+    </main>
+  </div>
+
+  <noscript>SantBani Bhajan Mala necesita JavaScript para el modo oscuro y el funcionamiento sin conexión.</noscript>
+  <script src="icons.js?v=1.0"></script>
+  <script src="app.js?v=1.0"></script>
+</body>
+</html>

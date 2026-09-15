@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eaf2ee">
+  <meta name="description" content="SR BM dentro de SantBani Bhajan Mala, con devanagari, transliteración y traducción española.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SantBani BM">
+  <meta name="app-version" content="1.0">
+  <title>SantBani Bhajan Mala · SR BM</title>
+  <script>
+    try {
+      const preferences = JSON.parse(localStorage.getItem("sr-bm:preferences") || "{}");
+      document.documentElement.dataset.theme = preferences.theme === "dark" ? "dark" : "light";
+    } catch {
+      document.documentElement.dataset.theme = "light";
+    }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="../santbani-icon.svg">
+  <link rel="apple-touch-icon" href="../santbani-icon-180.png">
+  <link rel="manifest" href="../manifest.webmanifest?v=1.0">
+  <link rel="stylesheet" href="styles.css?v=1.0">
+</head>
+<body>
+  <div class="app-shell">
+    <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+
+    <aside id="library-panel" class="library-panel" aria-label="Índice de bhajans">
+      <header class="library-header">
+        <a class="brand-lockup combined-brand-link" href="../" aria-label="Volver a SantBani Bhajan Mala">
+          <span class="brand-icon" aria-hidden="true"><i data-icon="BookOpen"></i></span>
+          <span>
+            <strong>SR BM</strong>
+            <small>Bhajan Mala · v1.0</small>
+          </span>
+        </a>
+        <button id="close-drawer" class="icon-button close-drawer" type="button" aria-label="Cerrar índice" title="Cerrar índice">
+          <i data-icon="PanelLeftClose"></i>
+        </button>
+      </header>
+
+      <div class="library-controls">
+        <div class="view-switch" role="tablist" aria-label="Vista del índice">
+          <button class="view-option active" type="button" role="tab" aria-selected="true" data-list-view="all">
+            <i data-icon="List"></i><span>Índice</span>
+          </button>
+          <button class="view-option" type="button" role="tab" aria-selected="false" data-list-view="favorites">
+            <i data-icon="Star"></i><span>Favoritos</span>
+          </button>
+        </div>
+
+        <label class="search-box">
+          <i data-icon="Search" aria-hidden="true"></i>
+          <span class="sr-only">Buscar bhajan</span>
+          <input id="search-input" type="search" autocomplete="off" placeholder="Buscar título o número">
+          <button id="clear-search" class="clear-search" type="button" aria-label="Borrar búsqueda" title="Borrar búsqueda" hidden>
+            <i data-icon="X"></i>
+          </button>
+        </label>
+
+        <p id="list-summary" class="list-summary" aria-live="polite"></p>
+      </div>
+
+      <div id="bhajan-list" class="bhajan-list" role="list"></div>
+    </aside>
+
+    <main class="reader-shell">
+      <header class="reader-toolbar">
+        <button id="open-drawer" class="icon-button mobile-only" type="button" aria-label="Abrir índice" title="Índice">
+          <i data-icon="Menu"></i>
+        </button>
+        <a class="mobile-brand combined-mobile-brand" href="../" aria-label="Volver a los libros">
+          <i data-icon="BookOpen"></i><strong>SR BM</strong><span class="app-version">v1.0</span>
+        </a>
+        <div class="toolbar-actions">
+          <a class="icon-button combined-home" href="../" aria-label="Volver a los libros" title="Libros">
+            <i data-icon="Library"></i>
+          </a>
+          <button id="audio-button" class="icon-button audio-button" type="button" aria-label="Reproducir bhajan" aria-pressed="false" title="Reproducir">
+            <i data-icon="Play"></i>
+          </button>
+          <button id="mobile-search" class="icon-button mobile-only" type="button" aria-label="Buscar bhajan" title="Buscar">
+            <i data-icon="Search"></i>
+          </button>
+          <button id="theme-button" class="icon-button" type="button" aria-label="Activar modo oscuro" title="Modo oscuro">
+            <i data-icon="Moon"></i>
+          </button>
+          <button id="favorite-button" class="icon-button favorite-button" type="button" aria-label="Añadir a favoritos" title="Favorito">
+            <i data-icon="Star"></i>
+          </button>
+        </div>
+      </header>
+
+      <article id="reader" class="reader" aria-live="polite">
+        <div class="loading-state">Cargando Bhajan Mala…</div>
+      </article>
+
+      <nav class="reader-pagination" aria-label="Navegación entre bhajans">
+        <button id="previous-bhajan" class="pagination-button" type="button">
+          <i data-icon="ChevronLeft"></i><span>Anterior</span>
+        </button>
+        <button id="pagination-index" class="pagination-index" type="button" aria-label="Abrir índice">
+          <i data-icon="Library"></i><span id="page-position">1 / 251</span>
+        </button>
+        <button id="next-bhajan" class="pagination-button next" type="button">
+          <span>Siguiente</span><i data-icon="ChevronRight"></i>
+        </button>
+      </nav>
+    </main>
+  </div>
+
+  <dialog id="word-dialog" class="word-dialog" aria-labelledby="word-dialog-title">
+    <div class="word-dialog-header">
+      <div>
+        <span class="dialog-eyebrow">Palabra</span>
+        <h2 id="word-dialog-title"></h2>
+      </div>
+      <button id="close-word-dialog" class="icon-button" type="button" aria-label="Cerrar definición" title="Cerrar">
+        <i data-icon="X"></i>
+      </button>
+    </div>
+    <div id="word-dialog-content" class="word-dialog-content"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <audio id="bhajan-audio" preload="auto"></audio>
+  <audio id="audio-session-hold" src="audio-session-hold.wav" preload="auto" loop aria-hidden="true" hidden></audio>
+
+  <noscript>SR BM necesita JavaScript para mostrar el índice y las fichas de vocabulario.</noscript>
+  <script src="icons.js?v=1.0"></script>
+  <script src="data.js?v=1.0"></script>
+  <script src="audio-map.js?v=1.0"></script>
+  <script src="app.js?v=1.0"></script>
+  <script src="audio-player.js?v=1.0"></script>
+</body>
+</html>

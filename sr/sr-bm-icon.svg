@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Libro abierto">
+  <rect width="512" height="512" rx="92" fill="#1f5b4f"/>
+  <rect x="52" y="52" width="408" height="408" rx="58" fill="#f7f8f5"/>
+  <g transform="translate(64 64) scale(16)" fill="none" stroke="#1f5b4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 7v14"/>
+    <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+  </g>
+  <path d="M336 130h42v126l-21-20-21 25z" fill="#c9573e"/>
+</svg>
