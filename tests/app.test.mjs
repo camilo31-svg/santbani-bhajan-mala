@@ -124,10 +124,12 @@ try {
 
   await page.goto(BASE_URL, { waitUntil: "networkidle", timeout: 90_000 });
   assert((await page.title()) === "SantBani Bhajan Mala", "El título principal es incorrecto.");
-  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.0", "Falta la versión 1.0.");
+  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.1", "Falta la versión 1.1.");
   assert(await page.locator(".book-card").count() === 2, "La portada no muestra los dos libros.");
-  assert((await page.locator(".book-card-footer strong").allInnerTexts()).join("|") === "Bhajan Mala|Bayanes de los Maestros", "Los nombres inferiores no coinciden.");
-  assert(await page.locator(".cover-frame img").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth === 900 && image.naturalHeight === 1200)), "Alguna carátula no se cargó.");
+  assert((await page.locator(".book-card-footer strong").allInnerTexts()).join("|") === "Sant Sadhu Ram Ji Bhajan Mala|Bayanes de los Maestros", "Los nombres inferiores no coinciden.");
+  assert(await page.locator(".cover-frame img").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 250 && image.naturalHeight > 400)), "Alguna carátula no se cargó.");
+  assert(await page.locator(".book-card").evaluateAll((cards) => cards.every((card) => Math.abs(card.getBoundingClientRect().width - card.getBoundingClientRect().height) < 2)), "Las tarjetas no son cuadradas.");
+  assert(await page.locator(".book-card").evaluateAll((cards) => cards.length === 2 && cards[1].getBoundingClientRect().top > cards[0].getBoundingClientRect().bottom), "Los libros no están apilados.");
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "La portada desborda horizontalmente.");
   await page.screenshot({ path: path.join(OUTPUT, "desktop-library.png"), fullPage: false });
 
@@ -137,7 +139,7 @@ try {
 
   await page.locator(".book-card-sr").click();
   await waitForReader(page, "SRBM_DATA", 251);
-  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.0", "SR BM no muestra v1.0.");
+  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.1", "SR BM no muestra v1.1.");
   assert(await page.locator(".bhajan-row").count() === 251, "SR BM no conserva sus 251 bhajans.");
   assert(await page.locator(".combined-home").isVisible(), "SR BM no ofrece regreso a la biblioteca en escritorio.");
   await page.locator(".word-button").first().click();
@@ -154,7 +156,7 @@ try {
 
   await page.locator(".book-card-sj").click();
   await waitForReader(page, "SJBM_DATA", 340);
-  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.0", "SJ BM no muestra v1.0.");
+  assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.1", "SJ BM no muestra v1.1.");
   assert(await page.locator(".bhajan-row").count() === 340, "SJ BM no conserva sus 340 entradas.");
   await page.locator('[data-reader-tab="spanish"]').click();
   assert(await page.locator(".spanish-copy p").count() > 0, "SJ BM perdió la traducción española.");
@@ -179,7 +181,8 @@ try {
     };
   });
   assert(mobile.width <= mobile.viewport, "La portada desborda en iPhone.");
-  assert(mobile.cards.length === 2 && mobile.cards[0].top === mobile.cards[1].top, "Los dos libros no aparecen juntos en móvil.");
+  assert(mobile.cards.length === 2 && mobile.cards[1].top > mobile.cards[0].bottom, "Los libros no aparecen apilados en móvil.");
+  assert(mobile.cards.every((card) => Math.abs((card.right - card.left) - (card.bottom - card.top)) < 2), "Las tarjetas móviles no son cuadradas.");
   assert(mobile.cards.every((card) => card.left >= 0 && card.right <= mobile.viewport), "Algún libro queda fuera del móvil.");
   await page.screenshot({ path: path.join(OUTPUT, "iphone-library.png"), fullPage: false });
 
@@ -211,7 +214,7 @@ try {
   assert(errors.length === 0, errors.join("\n"));
 
   console.log(JSON.stringify({
-    version: "1.0",
+    version: "1.1",
     libraryCards: 2,
     srBhajans: 251,
     sjEntries: 340,

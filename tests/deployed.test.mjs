@@ -16,21 +16,22 @@ const browser = await chromium.launch({ executablePath: EDGE, headless: true });
 try {
   const libraryContext = await browser.newContext({ locale: "es-ES" });
   const libraryPage = await libraryContext.newPage();
-  await libraryPage.goto(`${ROOT}?verify=1.0`, { waitUntil: "networkidle", timeout: 120_000 });
+  await libraryPage.goto(`${ROOT}?verify=1.1`, { waitUntil: "networkidle", timeout: 120_000 });
   assert((await libraryPage.title()) === "SantBani Bhajan Mala", "La portada pública tiene otro título.");
-  assert((await libraryPage.locator('meta[name="app-version"]').getAttribute("content")) === "1.0", "La portada pública no sirve v1.0.");
+  assert((await libraryPage.locator('meta[name="app-version"]').getAttribute("content")) === "1.1", "La portada pública no sirve v1.1.");
   assert(await libraryPage.locator(".book-card").count() === 2, "La portada pública no muestra ambos libros.");
-  assert(await libraryPage.locator(".cover-frame img").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth === 900)), "Las carátulas públicas no cargaron.");
+  assert(await libraryPage.locator(".cover-frame img").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 250 && image.naturalHeight > 400)), "Las carátulas públicas no cargaron.");
+  assert(await libraryPage.locator(".book-card").evaluateAll((cards) => cards.every((card) => Math.abs(card.getBoundingClientRect().width - card.getBoundingClientRect().height) < 2)), "Las tarjetas públicas no son cuadradas.");
   const manifestName = await libraryPage.evaluate(async (url) => {
     const response = await fetch(url, { cache: "no-store" });
     return response.ok ? (await response.json()).name : "";
-  }, `${ROOT}manifest.webmanifest?verify=1.0`);
+  }, `${ROOT}manifest.webmanifest?verify=1.1`);
   assert(manifestName === "SantBani Bhajan Mala", "El manifiesto público es incorrecto.");
   await libraryContext.close();
 
   const apps = [
-    { name: "SR BM", url: `${ROOT}sr/?verify=1.0#bhajan-1`, picker: false },
-    { name: "SJ BM", url: `${ROOT}sj/?verify=1.0#bhajan-17`, picker: true },
+    { name: "SR BM", url: `${ROOT}sr/?verify=1.1#bhajan-1`, picker: false },
+    { name: "SJ BM", url: `${ROOT}sj/?verify=1.1#bhajan-17`, picker: true },
   ];
 
   for (const app of apps) {
@@ -40,7 +41,7 @@ try {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(app.url, { waitUntil: "domcontentloaded", timeout: 120_000 });
     await page.locator("#audio-button").waitFor({ timeout: 120_000 });
-    assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.0", `${app.name}: versión pública incorrecta.`);
+    assert((await page.locator('meta[name="app-version"]').getAttribute("content")) === "1.1", `${app.name}: versión pública incorrecta.`);
     await page.locator("#audio-button").click();
     if (app.picker) {
       await page.locator("#audio-version-dialog[open]").waitFor();

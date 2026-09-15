@@ -184,11 +184,11 @@ a:focus-visible {
 
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 400px));
-  align-content: center;
+  grid-template-columns: minmax(0, 500px);
+  align-content: start;
   justify-content: center;
-  gap: clamp(14px, 3vw, 34px);
-  width: min(1040px, 100%);
+  gap: clamp(16px, 3vw, 28px);
+  width: min(600px, 100%);
   margin: 0 auto;
   padding: 28px 0 10px;
 }
@@ -197,6 +197,7 @@ a:focus-visible {
   position: relative;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
+  aspect-ratio: 1;
   min-width: 0;
   overflow: hidden;
   color: var(--ink);
@@ -232,19 +233,31 @@ a:focus-visible {
 }
 
 .cover-frame {
-  display: block;
+  position: relative;
+  display: grid;
+  place-items: center;
   min-width: 0;
-  aspect-ratio: 3 / 4;
+  min-height: 0;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.16);
   border-bottom: 1px solid var(--glass-edge);
 }
 
+.book-card-sr .cover-frame {
+  background: #f7f2ff;
+}
+
+.book-card-sj .cover-frame {
+  background: #262322;
+}
+
 .cover-frame img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .book-card-footer {
@@ -271,11 +284,9 @@ a:focus-visible {
 
 .book-card-copy strong {
   margin-top: 4px;
-  overflow: hidden;
   font-size: 0.98rem;
   line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .open-indicator {
@@ -337,9 +348,10 @@ a:focus-visible {
   }
 
   .book-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     align-content: start;
-    gap: 10px;
+    gap: 14px;
+    width: min(430px, 100%);
     padding-top: 18px;
   }
 
@@ -355,7 +367,6 @@ a:focus-visible {
 
   .book-card-copy strong {
     font-size: 0.84rem;
-    white-space: normal;
   }
 
   .open-indicator {
